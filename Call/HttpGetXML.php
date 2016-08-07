@@ -8,22 +8,6 @@ namespace Lsw\ApiCallerBundle\Call;
  */
 class HttpGetXML extends CurlCall implements ApiCallInterface
 {
-    /**
-     * ApiCall class constructor
-     *
-     * @param string  $url           API url
-     * @param object  $cookie        Cookie
-     * @param object  $requestObject Request
-     * @param boolean $asAssociativeArray
-     */
-    public function __construct($url,$cookie,$asAssociativeArray=false,$requestObject=null)
-    {
-        $this->url = $url;
-        $this->cookie = $cookie;
-        $this->requestObject = $requestObject;
-        $this->asAssociativeArray = $asAssociativeArray;
-        $this->generateRequestData();
-    }
 
     /**
      * {@inheritdoc}
@@ -49,6 +33,7 @@ class HttpGetXML extends CurlCall implements ApiCallInterface
         }
     }
 
+
     /**
      * {@inheritdoc}
      */
@@ -58,9 +43,13 @@ class HttpGetXML extends CurlCall implements ApiCallInterface
         if ($this->requestData) {
             $url.= $this->requestData;
         }
+        $options[CURLOPT_FOLLOWLOCATION] = false;
+//        dump($url);
+//        dump($options);exit;
         $curl->setopt(CURLOPT_URL, $url);
-        $curl->setopt(CURLOPT_COOKIE, $this->cookie);
+        //$curl->setopt(CURLOPT_COOKIE, "");
         $curl->setopt(CURLOPT_HTTPGET, TRUE);
+        $curl->setopt(CURLOPT_FOLLOWLOCATION, false);
         $curl->setoptArray($options);
         $this->curlExec($curl);
     }
